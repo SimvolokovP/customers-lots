@@ -3,19 +3,22 @@ import { FC, useEffect, useState } from "react";
 import Column from "antd/es/table/Column";
 import { useLotsStore } from "../../store/useLotsStore";
 import { ILot } from "../../models/ILot";
-import { LotsService } from "../../api/lotsService";
+import { GetLotsParams, LotsService } from "../../api/lotsService";
 import LotInfoModal from "../../components/LotInfoModal/LotInfoModal";
 import { lotsColumns } from "./lotsTable";
+import LotsFilter from "../../components/LotsFilter/LotsFilter";
 
 const LotsPage: FC = () => {
   const { lots, fetchLots } = useLotsStore();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedLot, setSelectedLot] = useState<ILot | null>(null);
 
+  const [searchParams, setSearchParams] = useState<GetLotsParams>({});
+
   useEffect(() => {
-    fetchLots();
+    fetchLots(searchParams);
     console.log(lots);
-  }, [fetchLots]);
+  }, [fetchLots, searchParams]);
 
   const handleOpenModal = async (lot: any) => {
     const targetLot = await LotsService.getLotById(lot.id);
@@ -42,8 +45,13 @@ const LotsPage: FC = () => {
     }
   };
 
+  const handleSearch = (params: GetLotsParams) => {
+    setSearchParams(params);
+  };
+
   return (
     <div>
+      <LotsFilter onFilter={handleSearch} />
       <Table dataSource={lots} pagination={{ pageSize: 4 }} rowKey="lot_name">
         {lotsColumns.map((col) => (
           <Column

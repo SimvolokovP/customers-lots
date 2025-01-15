@@ -3,12 +3,22 @@ import { ILot } from "../models/ILot";
 
 const SERVER_URL = "http://127.0.0.1:8000";
 
+export interface GetLotsParams {
+  nbs_rate?: string;
+  currency_code?: string;
+  search?: string;
+  ordering?: string;
+}
+
 export class LotsService {
-  static async getLots(): Promise<ILot[]> {
+  static async getLots(params: GetLotsParams = {}): Promise<ILot[]> {
     try {
       const response = await axios.get(`${SERVER_URL}/api/lots`, {
         headers: {
           "Content-Type": "application/json",
+        },
+        params: {
+          ...params,
         },
       });
       return response.data;

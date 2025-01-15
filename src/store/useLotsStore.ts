@@ -1,17 +1,17 @@
 import { create } from "zustand";
 import { ILot } from "../models/ILot";
-import { LotsService } from "../api/lotsService";
+import { GetLotsParams, LotsService } from "../api/lotsService";
 
 interface LotsState {
   lots: ILot[];
-  fetchLots: () => Promise<void>;
+  fetchLots: (params?: GetLotsParams) => Promise<void>;
 }
 
 export const useLotsStore = create<LotsState>((set) => ({
   lots: [],
-  fetchLots: async () => {
+  fetchLots: async (params: GetLotsParams = {}) => {
     try {
-      const lots = await LotsService.getLots();
+      const lots = await LotsService.getLots(params);
       if (lots) {
         const dataSource = lots.map((lot) => ({
           ...lot,
