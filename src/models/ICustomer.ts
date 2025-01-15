@@ -12,5 +12,6 @@ export interface ICustomer {
   customer_code_main: {
     customer_code: string;
     customer_name: string;
+    id: number;
   };
 }

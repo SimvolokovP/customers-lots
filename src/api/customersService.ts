@@ -3,14 +3,31 @@ import { ICustomer } from "../models/ICustomer";
 
 const SERVER_URL = "http://127.0.0.1:8000";
 
+export interface GetCustomersParams {
+  customer_inn?: string;
+  is_organization?: boolean;
+  is_person?: boolean;
+  search?: string;
+  ordering?: string;
+}
+
 export class CustomersService {
-  static async getCustomers(): Promise<ICustomer[]> {
+  static async getCustomers(
+    params: GetCustomersParams = {}
+  ): Promise<ICustomer[]> {
     try {
-      const response = await axios.get(`${SERVER_URL}/api/customers`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get<ICustomer[]>(
+        `${SERVER_URL}/api/customers`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          params: {
+            ...params,
+          },
+        }
+      );
+
       return response.data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -32,7 +49,7 @@ export class CustomersService {
           "Content-Type": "application/json",
         },
       });
-      console.log(response.data)
+      console.log(response.data);
       return response.data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {

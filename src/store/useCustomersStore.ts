@@ -1,17 +1,17 @@
 import { create } from "zustand";
 import { ICustomer } from "../models/ICustomer";
-import { CustomersService } from "../api/customersService";
+import { CustomersService, GetCustomersParams } from "../api/customersService";
 
 interface CustomersState {
   customers: ICustomer[];
-  fetchCustomers: () => Promise<void>;
+  fetchCustomers: (params?: GetCustomersParams) => Promise<void>;
 }
 
 export const useCustomersStore = create<CustomersState>((set) => ({
   customers: [],
-  fetchCustomers: async () => {
+  fetchCustomers: async (params: GetCustomersParams = {}) => {
     try {
-      const customers = await CustomersService.getCustomers();
+      const customers = await CustomersService.getCustomers(params);
       if (customers) {
         const dataSource = customers.map((customer) => ({
           ...customer,

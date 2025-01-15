@@ -4,25 +4,12 @@ import { useCustomersStore } from "../../store/useCustomersStore";
 import Column from "antd/es/table/Column";
 import CustomerInfoModal from "../../components/CustomerInfoModal/CustomerInfoModal";
 import { ICustomer } from "../../models/ICustomer";
-import { CustomersService } from "../../api/customersService";
-
-const columns = [
-  {
-    title: "Customer Name",
-    dataIndex: "customer_name",
-    key: "customer_name",
-  },
-  {
-    title: "Customer INN",
-    dataIndex: "customer_inn",
-    key: "customer_inn",
-  },
-  {
-    title: "Customer Email",
-    dataIndex: "customer_email",
-    key: "customer_email",
-  },
-];
+import {
+  CustomersService,
+  GetCustomersParams,
+} from "../../api/customersService";
+import { customersColumns } from "./customersTable";
+import SearchFilters from "../../components/SearchFilters/SearchFilters";
 
 const CustomersPage: FC = () => {
   const { customers, fetchCustomers } = useCustomersStore();
@@ -31,9 +18,12 @@ const CustomersPage: FC = () => {
     null
   );
 
+  const [searchParams, setSearchParams] = useState<GetCustomersParams>({});
+
   useEffect(() => {
-    fetchCustomers();
-  }, [fetchCustomers]);
+    console.log(searchParams);
+    fetchCustomers(searchParams);
+  }, [fetchCustomers, searchParams]);
 
   const handleOpenModal = async (customer: any) => {
     const targetCustomer = await CustomersService.getCustomerById(customer.id);
@@ -56,18 +46,23 @@ const CustomersPage: FC = () => {
     } catch (error) {
       message.error("Failed to update customer.");
     } finally {
-      fetchCustomers();
+      fetchCustomers(searchParams);
     }
+  };
+
+  const handleSearch = (params: GetCustomersParams) => {
+    setSearchParams(params);
   };
 
   return (
     <div>
+      <SearchFilters onSearch={handleSearch} />
       <Table
         dataSource={customers}
         pagination={{ pageSize: 4 }}
         rowKey="customer_code"
       >
-        {columns.map((col) => (
+        {customersColumns.map((col) => (
           <Column
             key={col.key}
             {...{ title: col.title, dataIndex: col.dataIndex }}
@@ -85,8 +80,8 @@ const CustomersPage: FC = () => {
           )}
         />
       </Table>
-
       <CustomerInfoModal
+        customersList={customers}
         onUpdate={handleUpdateCustomer}
         open={isModalVisible}
         customer={selectedCustomer}
