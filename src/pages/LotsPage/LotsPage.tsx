@@ -4,6 +4,7 @@ import Column from "antd/es/table/Column";
 import { useLotsStore } from "../../store/useLotsStore";
 import { ILot } from "../../models/ILot";
 import { LotsService } from "../../api/lotsService";
+import LotInfoModal from "../../components/LotInfoModal/LotInfoModal";
 
 const columns = [
   {
@@ -79,12 +80,12 @@ const LotsPage: FC = () => {
         />
       </Table>
 
-      {/* <CustomerInfoModal
+      <LotInfoModal
         onUpdate={handleUpdateCustomer}
         open={isModalVisible}
-        customer={selectedCustomer}
+        lot={selectedLot}
         onClose={handleCloseModal}
-      /> */}
+      />
     </div>
   );
 };
