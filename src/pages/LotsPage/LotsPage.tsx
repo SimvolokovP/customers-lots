@@ -5,24 +5,7 @@ import { useLotsStore } from "../../store/useLotsStore";
 import { ILot } from "../../models/ILot";
 import { LotsService } from "../../api/lotsService";
 import LotInfoModal from "../../components/LotInfoModal/LotInfoModal";
-
-const columns = [
-  {
-    title: "lot_name",
-    dataIndex: "lot_name",
-    key: "lot_name",
-  },
-  {
-    title: "price",
-    dataIndex: "price",
-    key: "price",
-  },
-  {
-    title: "nbs_rate",
-    dataIndex: "nbs_rate",
-    key: "nbs_rate",
-  },
-];
+import { lotsColumns } from "./lotsTable";
 
 const LotsPage: FC = () => {
   const { lots, fetchLots } = useLotsStore();
@@ -62,12 +45,21 @@ const LotsPage: FC = () => {
   return (
     <div>
       <Table dataSource={lots} pagination={{ pageSize: 4 }} rowKey="lot_name">
-        {columns.map((col) => (
+        {lotsColumns.map((col) => (
           <Column
             key={col.key}
             {...{ title: col.title, dataIndex: col.dataIndex }}
           />
         ))}
+        <Column
+          title="customer_code"
+          key="customer_code"
+          render={(_, record: ILot) => (
+            <Space size="middle">
+              {record?.customer_code?.customer_name || "N/A"}
+            </Space>
+          )}
+        />
         <Column
           title="Action"
           key="action"

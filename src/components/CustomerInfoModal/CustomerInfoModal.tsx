@@ -1,11 +1,11 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { Modal, Form, Input, Button, Select, Checkbox } from "antd";
 import { ICustomer } from "../../models/ICustomer";
+import { CustomersService } from "../../api/customersService";
 
 interface CustomerInfoModalProps {
   open: boolean;
   customer: ICustomer | null;
-  customersList: ICustomer[];
   onClose: () => void;
   onUpdate: (updatedCustomer: ICustomer) => void;
 }
@@ -13,11 +13,21 @@ interface CustomerInfoModalProps {
 const CustomerInfoModal: FC<CustomerInfoModalProps> = ({
   open,
   customer,
-  customersList,
   onClose,
   onUpdate,
 }) => {
   const [form] = Form.useForm();
+
+  const [customersList, setCustomersList] = useState<ICustomer[]>([]);
+
+  useEffect(() => {
+    const getList = async () => {
+      const list = await CustomersService.getCustomers();
+      setCustomersList(list);
+    };
+
+    getList();
+  }, []);
 
   useEffect(() => {
     if (customer) {
@@ -29,7 +39,7 @@ const CustomerInfoModal: FC<CustomerInfoModalProps> = ({
         customer_kpp: customer.customer_kpp,
         customer_legal_address: customer.customer_legal_address,
         customer_postal_address: customer.customer_postal_address,
-        customer_code_main: customer?.customer_code_main?.customer_name,
+        customer_code_main: customer?.customer_code_main?.id,
         is_organization: customer.is_organization,
         is_person: customer.is_person,
       });

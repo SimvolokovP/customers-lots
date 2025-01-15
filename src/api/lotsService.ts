@@ -49,6 +49,7 @@ export class LotsService {
 
   static async updateLot(lot: ILot) {
     try {
+      console.log(lot);
       const response = await axios.patch(
         `${SERVER_URL}/api/lots/${lot.id}/`,
         lot,

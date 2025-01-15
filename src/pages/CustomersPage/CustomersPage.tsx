@@ -90,7 +90,6 @@ const CustomersPage: FC = () => {
         />
       </Table>
       <CustomerInfoModal
-        customersList={customers}
         onUpdate={handleUpdateCustomer}
         open={isModalVisible}
         customer={selectedCustomer}
