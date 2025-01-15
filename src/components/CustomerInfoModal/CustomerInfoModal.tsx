@@ -29,7 +29,7 @@ const CustomerInfoModal: FC<CustomerInfoModalProps> = ({
         customer_kpp: customer.customer_kpp,
         customer_legal_address: customer.customer_legal_address,
         customer_postal_address: customer.customer_postal_address,
-        customer_code_main: customer?.customer_code_main?.customer_code,
+        customer_code_main: customer?.customer_code_main?.customer_name,
         is_organization: customer.is_organization,
         is_person: customer.is_person,
       });
@@ -37,18 +37,11 @@ const CustomerInfoModal: FC<CustomerInfoModalProps> = ({
   }, [customer, form]);
 
   const handleFinish = (values: any) => {
-    const selectedCustomer = customersList.find(
-      (cust) => cust.customer_code === values.customer_code_main
-    );
+    console.log(values);
 
     onUpdate({
       ...customer,
       ...values,
-      customer_code_main: {
-        customer_code: selectedCustomer?.customer_code || "",
-        customer_name: selectedCustomer?.customer_name || "",
-        id: selectedCustomer?.id || 0,
-      },
     });
     onClose();
   };
@@ -122,6 +115,16 @@ const CustomerInfoModal: FC<CustomerInfoModalProps> = ({
           ]}
         >
           <Input />
+        </Form.Item>
+
+        <Form.Item name="customer_code_main" label="Main Customer">
+          <Select placeholder="Select a customer">
+            {customersList.map((mainCustomer) => (
+              <Select.Option key={mainCustomer.id} value={mainCustomer.id}>
+                {mainCustomer.customer_name}
+              </Select.Option>
+            ))}
+          </Select>
         </Form.Item>
 
         <Form.Item name="is_organization" valuePropName="checked">

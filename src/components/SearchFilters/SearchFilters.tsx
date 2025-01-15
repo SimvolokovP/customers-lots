@@ -18,8 +18,8 @@ const SearchFilters: FC<SearchFiltersProps> = ({ onSearch }) => {
   const handleSearch = () => {
     const params: GetCustomersParams = {
       customer_inn: customerInn || undefined,
-      is_organization: isOrganization,
-      is_person: isPerson,
+      is_organization: isOrganization === true ? true : undefined,
+      is_person: isPerson === true ? true : undefined,
       search: search || undefined,
       ordering: ordering || undefined,
     };
@@ -27,7 +27,7 @@ const SearchFilters: FC<SearchFiltersProps> = ({ onSearch }) => {
   };
 
   return (
-    <Space direction="vertical" style={{ marginBottom: 16 }}>
+    <Space direction="horizontal" style={{ marginBottom: 16, display: "flex" }}>
       <Input
         placeholder="Search by Customer INN"
         value={customerInn}

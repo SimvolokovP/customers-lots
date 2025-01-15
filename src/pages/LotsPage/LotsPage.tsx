@@ -18,9 +18,9 @@ const columns = [
     key: "price",
   },
   {
-    title: " nbs_rate",
-    dataIndex: " nbs_rate",
-    key: " nbs_rate",
+    title: "nbs_rate",
+    dataIndex: "nbs_rate",
+    key: "nbs_rate",
   },
 ];
 
@@ -31,6 +31,7 @@ const LotsPage: FC = () => {
 
   useEffect(() => {
     fetchLots();
+    console.log(lots);
   }, [fetchLots]);
 
   const handleOpenModal = async (lot: any) => {

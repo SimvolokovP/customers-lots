@@ -69,6 +69,15 @@ const CustomersPage: FC = () => {
           />
         ))}
         <Column
+          title="Customer main"
+          key="customer_code_main"
+          render={(_, record: ICustomer) => (
+            <Space size="middle">
+              {record?.customer_code_main?.customer_name}
+            </Space>
+          )}
+        />
+        <Column
           title="Action"
           key="action"
           render={(_, record) => (
